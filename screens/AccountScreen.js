@@ -5,6 +5,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { changeModeAction, deletePicAction } from "../redux/ducks/accountPref";
 import { logOutAction } from "../redux/ducks/blogAuth";
 
+import axios from "axios";
+import { API, API_USER } from "../constants/API";
+
 
 export default function AccountScreen({ navigation }) {
   const picSize = new Animated.Value(0);
@@ -14,12 +17,30 @@ export default function AccountScreen({ navigation }) {
   };
 
   const token = useSelector((state) => state.auth.token);
+  const currUserId = useSelector((state) => state.auth.currentUserId);
   const currUserName = useSelector((state) => state.auth.currentUserName);
   const isDark = useSelector((state) => state.accountPrefs.isDark);
   const profilePicture = useSelector((state) => state.accountPrefs.profilePicture);
   const dispatch = useDispatch();
 
   const styles = { ...commonStyles, ...(isDark ? darkStyles : lightStyles) };
+
+
+  async function updateUserProfile(id) {
+    const user = {
+      isDark: isDark
+    };
+
+    console.log("Updating userid" + id + " .isDark: " + isDark);
+    try {
+      const response = await axios.put(API + API_USER + `/${id}`, user, {
+        headers: { Authorization: `JWT ${token}` },
+      })
+      console.log(response);
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   function signOut() {
     console.log("signing out now");
@@ -29,6 +50,7 @@ export default function AccountScreen({ navigation }) {
 
   function switchMode() {
     dispatch(changeModeAction());
+    const response = updateUserProfile(currUserId);
   }
 
   function deletePicture() {

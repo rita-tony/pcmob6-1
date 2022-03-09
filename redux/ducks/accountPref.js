@@ -3,6 +3,7 @@ export const DARK_MODE = "dark_mode";
 export const UPLOAD_PIC = "upload_pic";
 export const DELETE_PIC = "delete_pic";
 export const CHANGE_MODE = "change_mode";
+export const CURRENT_USER_THEME = "current_user_theme";
 
 const initialState = {
     isDark: false,
@@ -35,8 +36,14 @@ export function deletePicAction() {
     return { type: DELETE_PIC };
 }
 
+export function setCurrentUserTheme() {
+    return { type: CURRENT_USER_THEME };
+}
+
 export default function accountPrefReducer(state = initialState, action) {
     switch (action.type) {
+        case CURRENT_USER_THEME:
+            return { ...state, isDark: action.payload };
         case CHANGE_MODE:
             return { ...state, isDark: !state.isDark };
         case UPLOAD_PIC:

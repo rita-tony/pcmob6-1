@@ -3,6 +3,7 @@ export const LOG_OUT = "log_out";
 export const CURRENT_USER_ID = "current_user_id";
 export const CURRENT_USER_NAME = "current_user_name";
 
+
 export function logInAction() {
     return { type: LOG_IN };
 }
@@ -36,7 +37,7 @@ export default function blogAuthReducer(state = initialState, action) {
         case CURRENT_USER_ID:
             return { ...state, currentUserId: action.payload }
         case CURRENT_USER_NAME:
-            return { ...state, currentUserName: action.payload }            
+            return { ...state, currentUserName: action.payload }
         default:
             return state
     }

@@ -5,7 +5,8 @@ import axios from "axios";
 import { API, API_POSTS, API_POST, API_WHOAMI } from "../constants/API";
 import { lightStyles, darkStyles } from "../styles/commonStyles";
 import { useSelector, useDispatch } from "react-redux";
-import { setCurrentUserId, setCurrentUserName, logOutAction } from "../redux/ducks/blogAuth";
+import { setCurrentUserId, setCurrentUserName } from "../redux/ducks/blogAuth";
+import { setCurrentUserTheme } from "../redux/ducks/accountPref";
 
 
 export default function IndexScreen({ navigation, route }) {
@@ -55,11 +56,13 @@ export default function IndexScreen({ navigation, route }) {
       });
       dispatch({ ...setCurrentUserId(), payload: responseWhoAmI.data.id });
       dispatch({ ...setCurrentUserName(), payload: responseWhoAmI.data.username });
+      dispatch({ ...setCurrentUserTheme(), payload: responseWhoAmI.data.isDark });
 
       const response = await axios.get(API + API_POSTS + `/${responseWhoAmI.data.id}`, {
         headers: { Authorization: `JWT ${token}` },
       });
       console.log("Get Posts for userid: " + responseWhoAmI.data.id);
+      console.log("User theme: " + responseWhoAmI.data.isDark);
       console.log(response.data);
       setPosts(response.data);
       return "completed";
