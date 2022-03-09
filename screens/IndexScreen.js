@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, TouchableOpacity, FlatList, RefreshControl } from "react-native";
+import { ActivityIndicator, Text, View, TouchableOpacity, FlatList, RefreshControl } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
-import { API, API_POSTS } from "../constants/API";
+import { API, API_POSTS, API_POST, API_WHOAMI } from "../constants/API";
 import { lightStyles, darkStyles } from "../styles/commonStyles";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setCurrentUserId, setCurrentUserName, logOutAction } from "../redux/ducks/blogAuth";
 
 
 export default function IndexScreen({ navigation, route }) {
 
+  const dispatch = useDispatch();
   const [posts, setPosts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const token = useSelector((state) => state.auth.token);
-
   const isDark = useSelector((state) => state.accountPrefs.isDark);
   const styles = isDark ? darkStyles : lightStyles;
 
@@ -40,6 +41,8 @@ export default function IndexScreen({ navigation, route }) {
       getPosts();
     });
 
+    console.log('%%%%')
+    
     getPosts();
 
     return removeListener;
@@ -47,9 +50,16 @@ export default function IndexScreen({ navigation, route }) {
 
   async function getPosts() {
     try {
-      const response = await axios.get(API + API_POSTS, {
+      const responseWhoAmI = await axios.get(API + API_WHOAMI, {
         headers: { Authorization: `JWT ${token}` },
       });
+      dispatch({ ...setCurrentUserId(), payload: responseWhoAmI.data.id });
+      dispatch({ ...setCurrentUserName(), payload: responseWhoAmI.data.username });
+
+      const response = await axios.get(API + API_POSTS + `/${responseWhoAmI.data.id}`, {
+        headers: { Authorization: `JWT ${token}` },
+      });
+      console.log("Get Posts for userid: " + responseWhoAmI.data.id);
       console.log(response.data);
       setPosts(response.data);
       return "completed";
@@ -74,7 +84,7 @@ export default function IndexScreen({ navigation, route }) {
   async function deletePost(id) {
     console.log("Deleting " + id);
     try {
-      const response = await axios.delete(API + API_POSTS + `/${id}`, {
+      const response = await axios.delete(API + API_POST + `/${id}`, {
         headers: { Authorization: `JWT ${token}` },
       })
       console.log(response);
@@ -85,6 +95,7 @@ export default function IndexScreen({ navigation, route }) {
     }
   }
 
+  
   // The function to render each row in our FlatList
   function renderItem({ item }) {
     return (

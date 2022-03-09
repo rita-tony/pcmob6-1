@@ -3,7 +3,7 @@ import { Text, View, TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { commonStyles, lightStyles, darkStyles } from "../styles/commonStyles";
 import axios from "axios";
-import { API, API_POSTS } from "../constants/API";
+import { API, API_POST } from "../constants/API";
 import { useSelector } from "react-redux";
 
 export default function ShowScreen({ navigation, route }) {
@@ -32,7 +32,7 @@ export default function ShowScreen({ navigation, route }) {
     const id = route.params.id
     console.log(id)
     try {
-      const response = await axios.get(API + API_POSTS + "/" + id, {
+      const response = await axios.get(API + API_POST + "/" + id, {
         headers: { Authorization: `JWT ${token}` },
       })
       console.log(response.data);

@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, UIManager, ActivityIndicator, Keyboard, LayoutAnimation, Platform } from 'react-native';
-import { API, API_LOGIN, API_SIGNUP } from '../constants/API';
+import { API, API_LOGIN, API_SIGNUP, API_WHOAMI } from '../constants/API';
 import axios from 'axios';
 import { useDispatch } from "react-redux";
 import { logInAction } from "../redux/ducks/blogAuth";
@@ -32,8 +32,8 @@ export default function SignInSignUpScreen({ navigation }) {
         password,
       });
       console.log("Success logging in!");
-    
-      console.log(response.data.access_token);
+      //console.log(response);
+      //console.log(response.data.access_token);
       dispatch({ ...logInAction(), payload: response.data.access_token });
 
       setLoading(false);
@@ -97,7 +97,7 @@ export default function SignInSignUpScreen({ navigation }) {
           onChangeText={(username) => setUsername(username)}
         />
       </View>
-  
+
       <View style={styles.inputView}>
         <TextInput
           style={styles.textInput}
@@ -109,7 +109,7 @@ export default function SignInSignUpScreen({ navigation }) {
         />
       </View>
 
-        {isLogIn ? <View/> :
+      {isLogIn ? <View /> :
         <View style={styles.inputView}>
           <TextInput
             style={styles.textInput}
@@ -120,13 +120,13 @@ export default function SignInSignUpScreen({ navigation }) {
           />
         </View>}
 
-      <View/>
+      <View />
       <View>
-        <View style={{flexDirection: "row"}}>
-          <TouchableOpacity style={styles.button} onPress={ isLogIn ? login : signUp}>
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity style={styles.button} onPress={isLogIn ? login : signUp}>
             <Text style={styles.buttonText}> {isLogIn ? "Log In" : "Sign Up"} </Text>
           </TouchableOpacity>
-          {loading ? <ActivityIndicator style={{ marginLeft: 10 }}/> : <View/>}
+          {loading ? <ActivityIndicator style={{ marginLeft: 10 }} /> : <View />}
         </View>
       </View>
       <Text style={styles.errorText}>
@@ -144,7 +144,7 @@ export default function SignInSignUpScreen({ navigation }) {
           setIsLogIn(!isLogIn);
           setErrorText("");
         }}>
-          <Text style={styles.switchText}> {isLogIn ? "No account? Sign up now." : "Already have an account? Log in here."}</Text>
+        <Text style={styles.switchText}> {isLogIn ? "No account? Sign up now." : "Already have an account? Log in here."}</Text>
       </TouchableOpacity>
 
     </View>
@@ -160,12 +160,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: 'bold',
-    fontSize: 40, 
+    fontSize: 40,
     margin: 20
   },
   switchText: {
     fontWeight: '400',
-    fontSize: 20, 
+    fontSize: 20,
     marginTop: 20
   },
   inputView: {
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontWeight: '400',
-    fontSize: 20, 
+    fontSize: 20,
     margin: 20,
     color: 'white'
   },

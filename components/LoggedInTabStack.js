@@ -9,6 +9,7 @@ const Tab = createBottomTabNavigator();
 
 export default function LoggedInTabStack() {
   const isDark = useSelector((state) => state.accountPrefs.isDark);
+  
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from "react-native";
 import { commonStyles, lightStyles, darkStyles } from "../styles/commonStyles";
 import axios from "axios";
-import { API, API_POSTS } from "../constants/API";
+import { API, API_POST } from "../constants/API";
 import { useSelector } from "react-redux";
 
 export default function EditScreen({ navigation, route }) {
@@ -29,7 +29,7 @@ export default function EditScreen({ navigation, route }) {
 
     console.log("Updating " + id);
     try {
-      const response = await axios.put(API + API_POSTS + `/${id}`, post, {
+      const response = await axios.put(API + API_POST + `/${id}`, post, {
         headers: { Authorization: `JWT ${token}` },
       })
       console.log(response);

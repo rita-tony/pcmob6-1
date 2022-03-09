@@ -10,6 +10,8 @@ export default function CreateScreen({ navigation }) {
   const isDark = useSelector((state) => state.accountPrefs.isDark);
   const styles = { ...commonStyles, ...(isDark ? darkStyles : lightStyles) };
 
+  const currentUserId = useSelector((state) => state.auth.currentUserId);
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
@@ -17,14 +19,16 @@ export default function CreateScreen({ navigation }) {
     const post = {
       title: title,
       content: content,
+      userid: currentUserId,
     };
 
     try {
-      console.log(token);
+      console.log("Create Post");
+      //console.log(token);
       const response = await axios.post(API + API_CREATE, post, {
         headers: { Authorization: `JWT ${token}` },
       });
-      console.log(response.data);
+      //console.log(response.data);
       navigation.navigate("Index", { post: post });
     } catch (error) {
       console.log(error);
@@ -34,6 +38,7 @@ export default function CreateScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={{ margin: 20 }}>
+      <Text style={[additionalStyles.label, styles.text]}>User Id: {currentUserId}</Text>
         <Text style={[additionalStyles.label, styles.text]}>Enter Title:</Text>
         <TextInput
           style={additionalStyles.input}
