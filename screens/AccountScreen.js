@@ -26,9 +26,9 @@ export default function AccountScreen({ navigation }) {
   const styles = { ...commonStyles, ...(isDark ? darkStyles : lightStyles) };
 
 
-  async function updateUserProfile(id) {
+  async function updateUserProfile(id, bDarkMode) {
     const user = {
-      isDark: isDark
+      isDark: !bDarkMode
     };
 
     console.log("Updating userid" + id + " .isDark: " + isDark);
@@ -36,7 +36,7 @@ export default function AccountScreen({ navigation }) {
       const response = await axios.put(API + API_USER + `/${id}`, user, {
         headers: { Authorization: `JWT ${token}` },
       })
-      console.log(response);
+      console.log("Is Dark Mode: " + response.data.isDark);
     } catch (error) {
       console.log(error)
     }
@@ -50,7 +50,7 @@ export default function AccountScreen({ navigation }) {
 
   function switchMode() {
     dispatch(changeModeAction());
-    const response = updateUserProfile(currUserId);
+    const response = updateUserProfile(currUserId, isDark);
   }
 
   function deletePicture() {
